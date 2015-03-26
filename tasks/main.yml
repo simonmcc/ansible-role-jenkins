@@ -34,6 +34,8 @@
   get_url:
     url: "http://{{ jenkins_hostname }}:8080/jnlpJars/jenkins-cli.jar"
     dest: "{{ jenkins_jar_location }}"
+    # we're pulling from the localhost by name, we shouldn't need a proxy
+    use_proxy: no
   register: jarfile_get
   until: "'OK' in jarfile_get.msg or 'file already exists' in jarfile_get.msg"
   retries: 5

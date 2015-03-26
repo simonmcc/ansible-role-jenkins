@@ -20,5 +20,6 @@
 - name: Ensure Jenkins is installed.
   apt: pkg=jenkins state=installed
 
-- name: Tweak the configuration
-  lineinfile: dest=/etc/default/jenkins backup=yes regexp="^JAVA_ARGS=" line='JAVA_ARGS="-Djava.awt.headless=true {{ java_proxy_opts }}"'
+- name: Update /etc/default/jenkins
+  template: src=etc/default/jenkins.j2 dest=/etc/default/jenkins
+  notify: restart jenkins
