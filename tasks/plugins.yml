@@ -24,8 +24,17 @@
 
 - name: Install Jenkins plugins.
   command: >
-    java {{ java_proxy_opts }} -jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:8080/ install-plugin {{ item }}
+    java -jar {{ jenkins_jar_location }} -s http://{{ jenkins_hostname }}:8080/ install-plugin {{ item }}
     creates=/var/lib/jenkins/plugins/{{ item }}.jpi
   with_items: jenkins_plugins
-  notify: restart jenkins
   environment: host_env
+  register: jenkins_plugin_install
+
+#- name: Results from /etc/default/jenkins template
+#  debug: var=jenkins_plugin_install
+
+# this has to be executed inside this task so that the rest of the
+# dynamic config can take place, this is why we don't use a handler
+- name: restart jenkins
+  service: name=jenkins state=restarted
+  when: jenkins_plugin_install.changed

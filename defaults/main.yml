@@ -3,6 +3,9 @@ jenkins_hostname: localhost
 jenkins_jar_location: /opt/jenkins-cli.jar
 jenkins_plugins:
   - git
+  - gerrit-trigger
   - sonar
+  - build-with-parameters
+  - delivery-pipeline-plugin
   - ssh
   - ssh-credentials

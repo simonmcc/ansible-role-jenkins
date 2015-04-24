@@ -4,6 +4,8 @@
   with_items:
     - curl
     - git
+    - python-virtualenv
+    - python-dev
 
 - name: Add Jenkins apt repository key.
   apt_key:
@@ -22,4 +24,13 @@
 
 - name: Update /etc/default/jenkins
   template: src=etc/default/jenkins.j2 dest=/etc/default/jenkins
-  notify: restart jenkins
+  register: etc_default_jenkins
+
+- name: Results from /etc/default/jenkins template
+  debug: var=etc_default_jenkins
+
+# this has to be executed inside this task so that the rest of the
+# dynamic config can take place - this is why we don't use a handler
+- name: restart jenkins
+  service: name=jenkins state=restarted
+  when: etc_default_jenkins.changed
