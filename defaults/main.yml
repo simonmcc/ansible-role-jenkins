@@ -10,3 +10,4 @@ jenkins_plugins:
   - delivery-pipeline-plugin
   - ssh
   - ssh-credentials
+  - hipchat
