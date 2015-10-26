@@ -13,6 +13,11 @@
     jenkins_repo_key_url: "{{ __jenkins_repo_key_url }}"
   when: jenkins_repo_key_url is not defined
 
+- name: Define java_proxy_opts
+  set_fact:
+    java_proxy_opts: ""
+  when: java_proxy_opts is not defined
+
 # Setup/install tasks.
 - include: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
