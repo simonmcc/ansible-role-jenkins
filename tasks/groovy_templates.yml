@@ -1,0 +1,28 @@
+- set_fact:
+    groovy_templates: []
+  when: groovy_templates is undefined
+  tags: groovy_templates
+
+- file: state=directory path="/tmp/{{ ansible_fqdn }}"
+  tags: groovy_templates
+  delegate_to: localhost
+
+# expand out each template
+- template: src="{{ item }}.j2" dest="/tmp/{{ ansible_fqdn }}/{{ item }}"
+  delegate_to: localhost
+  with_items: groovy_templates
+  tags: groovy_templates
+
+- name: groovy_templates
+  uri:
+    url: "{{ jenkins_url }}"
+    method: POST
+    HEADER_Content-Type: "application/x-www-form-urlencoded"
+    # user: admin
+    # password: admin
+    body: "script={{ lookup('file', '/tmp/' + ansible_fqdn + '/' + item) }}"
+    return_content: yes
+    force_basic_auth: yes
+  delegate_to: localhost
+  tags: groovy_templates
+  with_items: groovy_templates

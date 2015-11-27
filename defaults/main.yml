@@ -11,3 +11,6 @@ jenkins_plugins:
   - ssh
   - ssh-credentials
   - hipchat
+# this is deliberatly pointless
+proxy_env:
+  empty: "dictionary"

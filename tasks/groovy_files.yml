@@ -1,0 +1,17 @@
+- set_fact:
+    groovy_files: []
+  when: groovy_files is undefined
+
+- name: groovy_files
+  uri:
+    url: "{{ jenkins_url }}"
+    method: POST
+    HEADER_Content-Type: "application/x-www-form-urlencoded"
+    # user: admin
+    # password: admin
+    body: "script={{ lookup('file', item) }}"
+    return_content: yes
+    force_basic_auth: yes
+  delegate_to: localhost
+  tags: groovy_files
+  with_items: groovy_files
